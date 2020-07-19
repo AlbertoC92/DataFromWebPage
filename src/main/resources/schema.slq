@@ -1,0 +1,25 @@
+
+
+CREATE TABLE `item` (
+  `id` int(11) NOT NULL,
+  `title` varchar(191) NOT NULL,
+  `description` longtext NOT NULL,
+  `enclosure` varchar(191) NOT NULL,
+  `pub_date` varchar(191) NOT NULL,
+  `guid` varchar(191) NOT NULL,
+  `feed_burner` varchar(191) NOT NULL,
+  `link` varchar(191) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Primary key of item table
+--
+ALTER TABLE `item`
+  ADD PRIMARY KEY (`id`);
+--
+-- AUTO_INCREMENT addedd to the id
+--
+ALTER TABLE `item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+COMMIT;
+

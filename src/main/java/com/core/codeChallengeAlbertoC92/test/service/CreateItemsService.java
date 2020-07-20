@@ -33,7 +33,7 @@ public class CreateItemsService implements CreateItems {
     private ItemsMapper itemsMapper;
 
     @SneakyThrows
-    private String peticionHttpGet(String obtainedData) {
+    private String HttpGetInfo(String obtainedData) {
         StringBuilder result = new StringBuilder();
         URL url = new URL(obtainedData);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -54,7 +54,7 @@ public class CreateItemsService implements CreateItems {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         InputSource is = new InputSource();
-        is.setCharacterStream(new StringReader(peticionHttpGet(obtainedData)));
+        is.setCharacterStream(new StringReader(HttpGetInfo(obtainedData)));
 
         Document doc = db.parse(is);
         NodeList nodes = doc.getElementsByTagName("item");

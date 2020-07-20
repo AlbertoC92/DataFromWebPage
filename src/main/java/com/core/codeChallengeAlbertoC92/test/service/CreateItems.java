@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CreateItems {
     List<DbItem> insertItems(String urlParaVisitar);
-    List<Item> obtainSotredItems();
+    List<Item> obtainSortedItems();
 }

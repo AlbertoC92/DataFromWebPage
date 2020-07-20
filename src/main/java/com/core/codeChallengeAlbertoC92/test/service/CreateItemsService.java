@@ -1,7 +1,5 @@
 package com.core.codeChallengeAlbertoC92.test.service;
 
-import com.core.codeChallengeAlbertoC92.test.Exceptions.EmptyDataBaseException;
-import com.core.codeChallengeAlbertoC92.test.Exceptions.ItemAlreadyExistException;
 import com.core.codeChallengeAlbertoC92.test.data.DbItem;
 import com.core.codeChallengeAlbertoC92.test.mappers.ItemsMapper;
 import com.core.codeChallengeAlbertoC92.test.model.Item;
@@ -35,28 +33,28 @@ public class CreateItemsService implements CreateItems {
     private ItemsMapper itemsMapper;
 
     @SneakyThrows
-    private String peticionHttpGet(String urlParaVisitar) {
-        StringBuilder resultado = new StringBuilder();
-        URL url = new URL(urlParaVisitar);
-        HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-        conexion.setRequestMethod("GET");
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-        String linea;
-        while ((linea = rd.readLine()) != null) {
-            resultado.append(linea);
+    private String peticionHttpGet(String obtainedData) {
+        StringBuilder result = new StringBuilder();
+        URL url = new URL(obtainedData);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
 
         }
         rd.close();
-        return resultado.toString();
+        return result.toString();
     }
 
     @SneakyThrows
     @Override
-    public List<DbItem> insertItems(String urlParaVisitar) {
+    public List<DbItem> insertItems(String obtainedData) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         InputSource is = new InputSource();
-        is.setCharacterStream(new StringReader(peticionHttpGet(urlParaVisitar)));
+        is.setCharacterStream(new StringReader(peticionHttpGet(obtainedData)));
 
         Document doc = db.parse(is);
         NodeList nodes = doc.getElementsByTagName("item");
@@ -66,10 +64,6 @@ public class CreateItemsService implements CreateItems {
             Element element = (Element) nodes.item(i);
             DbItem dbItem = createItem(element);
             DbItem exist = itemRepository.findItemByTitle(dbItem.getTitle());
-            if (exist != null) {
-                String longMessage = "The item already exist into the data base";
-                throw new ItemAlreadyExistException("The item you are trying to insert, is already in the data base", HttpStatus.BAD_REQUEST,longMessage, LOGGER);
-            }
             itemRepository.save(dbItem);
             dbItemList.add(dbItem);
         }
@@ -131,12 +125,8 @@ public class CreateItemsService implements CreateItems {
 
     @SneakyThrows
     @Override
-    public List<Item> obtainSotredItems() {
+    public List<Item> obtainSortedItems() {
         List<DbItem> dbItemList = itemRepository.findAll();
-        if(dbItemList.isEmpty()) {
-            String longMessage = "The data base doesn't have any items to check";
-            throw new EmptyDataBaseException("The data base is empty", HttpStatus.BAD_REQUEST,longMessage, LOGGER);
-        }
         List<Item> itemList = new ArrayList<Item>();
         dbItemList.forEach(dbItem -> itemList.add(itemsMapper.fromDbItemToItem(dbItem)));
 

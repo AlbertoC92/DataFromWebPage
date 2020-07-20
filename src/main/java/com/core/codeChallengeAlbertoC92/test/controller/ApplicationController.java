@@ -23,6 +23,6 @@ public class ApplicationController {
 
     @GetMapping(value = "/obtainStoredItems")
     private List<Item> obtainStoredItems() {
-        return createItems.obtainSotredItems();
+        return createItems.obtainSortedItems();
     }
 }
